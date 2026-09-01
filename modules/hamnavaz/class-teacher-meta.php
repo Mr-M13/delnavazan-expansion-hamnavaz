@@ -50,6 +50,13 @@ final class Teacher_Meta {
 	const CITY_KEY = '_hamnavaz_city';
 
 	/**
+	 * Normalized internal city key.
+	 *
+	 * @var string
+	 */
+	const CITY_NORMALIZED_KEY = '_hamnavaz_city_key';
+
+	/**
 	 * Nonce action.
 	 *
 	 * @var string
@@ -87,6 +94,9 @@ final class Teacher_Meta {
 		add_action( 'add_meta_boxes_' . Teacher_Post_Type::POST_TYPE, array( $this, 'register_meta_boxes' ) );
 		add_action( 'edit_form_top', array( $this, 'render_nonce' ) );
 		add_action( 'save_post_' . Teacher_Post_Type::POST_TYPE, array( $this, 'save' ), 10, 2 );
+		add_action( 'added_post_meta', array( $this, 'synchronize_city_key_on_meta_change' ), 10, 4 );
+		add_action( 'updated_post_meta', array( $this, 'synchronize_city_key_on_meta_change' ), 10, 4 );
+		add_action( 'deleted_post_meta', array( $this, 'synchronize_city_key_on_meta_change' ), 10, 4 );
 		add_action( 'admin_notices', array( $this, 'render_validation_notice' ) );
 	}
 
@@ -156,7 +166,11 @@ final class Teacher_Meta {
 	 * @return bool
 	 */
 	public function authorize_meta( $allowed, $meta_key, $post_id ) {
-		unset( $allowed, $meta_key );
+		unset( $allowed );
+
+		if ( self::CITY_NORMALIZED_KEY === $meta_key ) {
+			return false;
+		}
 
 		return current_user_can( 'edit_post', (int) $post_id );
 	}
@@ -270,7 +284,7 @@ final class Teacher_Meta {
 		echo '<div class="hamnavaz-teacher-fields">';
 
 		foreach ( $this->field_definitions() as $meta_key => $field ) {
-			if ( $section !== $field['section'] ) {
+			if ( $section !== $field['section'] || ! empty( $field['derived'] ) ) {
 				continue;
 			}
 
@@ -317,6 +331,10 @@ final class Teacher_Meta {
 		$errors = array();
 
 		foreach ( $this->field_definitions() as $meta_key => $field ) {
+			if ( ! empty( $field['derived'] ) ) {
+				continue;
+			}
+
 			if ( 'checkbox' === $field['input_type'] ) {
 				$raw_value = isset( $_POST[ $meta_key ] ) ? '1' : '0';
 			} elseif ( 'checkboxes' === $field['input_type'] ) {
@@ -341,6 +359,8 @@ final class Teacher_Meta {
 			}
 		}
 
+		$this->synchronize_city_key( $post_id );
+
 		if ( ! empty( $errors ) ) {
 			set_transient(
 				self::ERROR_TRANSIENT_PREFIX . get_current_user_id(),
@@ -348,6 +368,44 @@ final class Teacher_Meta {
 				MINUTE_IN_SECONDS
 			);
 		}
+	}
+
+	/**
+	 * Keep the derived city key synchronized when the readable city meta changes.
+	 *
+	 * @param mixed  $meta_id    Metadata row ID or deleted row IDs.
+	 * @param int    $object_id  Post ID.
+	 * @param string $meta_key   Changed meta key.
+	 * @param mixed  $meta_value Changed meta value.
+	 * @return void
+	 */
+	public function synchronize_city_key_on_meta_change( $meta_id, $object_id, $meta_key, $meta_value ) {
+		unset( $meta_id, $meta_value );
+
+		if ( self::CITY_KEY !== $meta_key || Teacher_Post_Type::POST_TYPE !== get_post_type( $object_id ) ) {
+			return;
+		}
+
+		$this->synchronize_city_key( $object_id );
+	}
+
+	/**
+	 * Derive a stable, filterable city key from a human-readable city label.
+	 *
+	 * WordPress slug normalization collapses case, accents, whitespace, and common
+	 * punctuation differences without introducing a global city vocabulary.
+	 *
+	 * @param mixed $city Human-readable city value.
+	 * @return string
+	 */
+	public static function normalize_city_key( $city ) {
+		if ( ! is_scalar( $city ) ) {
+			return '';
+		}
+
+		$city = sanitize_text_field( (string) $city );
+
+		return '' === $city ? '' : sanitize_title( $city );
 	}
 
 	/**
@@ -573,6 +631,8 @@ final class Teacher_Meta {
 		switch ( $field['sanitize'] ) {
 			case 'text':
 				return is_scalar( $value ) ? sanitize_text_field( (string) $value ) : new \WP_Error( 'invalid_text' );
+			case 'city_key':
+				return self::normalize_city_key( $value );
 			case 'textarea':
 				return is_scalar( $value ) ? sanitize_textarea_field( (string) $value ) : new \WP_Error( 'invalid_textarea' );
 			case 'email':
@@ -842,6 +902,23 @@ final class Teacher_Meta {
 	}
 
 	/**
+	 * Synchronize the internal city key with the current readable city value.
+	 *
+	 * @param int $post_id Teacher post ID.
+	 * @return void
+	 */
+	private function synchronize_city_key( $post_id ) {
+		$city_key = self::normalize_city_key( get_post_meta( $post_id, self::CITY_KEY, true ) );
+
+		if ( '' === $city_key ) {
+			delete_post_meta( $post_id, self::CITY_NORMALIZED_KEY );
+			return;
+		}
+
+		update_post_meta( $post_id, self::CITY_NORMALIZED_KEY, $city_key );
+	}
+
+	/**
 	 * Return the complete Phase 2 field registry.
 	 *
 	 * @return array
@@ -913,10 +990,19 @@ final class Teacher_Meta {
 			self::CITY_KEY                 => array(
 				'section'     => 'location',
 				'label'       => esc_html__( 'City', 'delnavazan-expansion' ),
-				'description' => '',
+				'description' => esc_html__( 'Readable city label. A normalized internal key is derived automatically for future filtering.', 'delnavazan-expansion' ),
 				'input_type'  => 'text',
 				'meta_type'   => 'string',
 				'sanitize'    => 'text',
+			),
+			self::CITY_NORMALIZED_KEY      => array(
+				'section'     => 'location',
+				'label'       => esc_html__( 'Normalized City Key', 'delnavazan-expansion' ),
+				'description' => '',
+				'input_type'  => 'text',
+				'meta_type'   => 'string',
+				'sanitize'    => 'city_key',
+				'derived'     => true,
 			),
 			'_hamnavaz_suburb'             => array(
 				'section'     => 'location',

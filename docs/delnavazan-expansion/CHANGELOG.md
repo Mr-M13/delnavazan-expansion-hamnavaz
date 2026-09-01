@@ -18,10 +18,13 @@ All notable changes to Delnavazan Expansion are documented here.
 - Advanced the plugin version to `0.2.0`.
 - Expanded the Delnavazan admin presence to link to teacher management for users with standard page-editing capabilities.
 - Scoped the existing admin stylesheet to Hamnavaz teacher screens as well as the module status page.
+- Enforced one primary country per teacher with a single-select taxonomy control and assignment guard.
+- Retained the readable city label while deriving `_hamnavaz_city_key` for normalized future Country → City → Instrument filtering without a global city taxonomy.
 
 ### Security
 
 - Added explicit custom-field nonce and capability checks, autosave/revision guards, context-aware output escaping, controlled allowlists, and strict contact/price/date validation.
+- Added a separate country nonce, term validation, and malformed multi-country normalization so teacher saves cannot persist multiple countries.
 - Kept the teacher model private, non-queryable, and excluded from REST in Phase 2.
 
 ## [0.1.0] - 2026-09-01

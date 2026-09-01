@@ -35,7 +35,7 @@ The English name is stored as registered post metadata because it is distinct fr
 
 ## Metadata contract
 
-All custom fields use private `_hamnavaz_`-prefixed keys, are registered for `hamnavaz_teacher`, are single-value metadata entries, are excluded from REST in this phase, and require `edit_post` authorization.
+All custom fields use private `_hamnavaz_`-prefixed keys, are registered for `hamnavaz_teacher`, are single-value metadata entries, and are excluded from REST in this phase. Editable fields require `edit_post` authorization; the derived city key rejects independent metadata authorization and is maintained internally.
 
 ### Identity
 
@@ -52,6 +52,7 @@ All custom fields use private `_hamnavaz_`-prefixed keys, are registered for `ha
 
 - `_hamnavaz_state`
 - `_hamnavaz_city`
+- `_hamnavaz_city_key` (derived, internal)
 - `_hamnavaz_suburb`
 - `_hamnavaz_public_location`
 
@@ -92,10 +93,12 @@ Verification timestamps are stored as Unix timestamps. The admin UI converts bet
 Phase 2 registers three private, admin-managed, non-hierarchical taxonomies:
 
 - `hamnavaz_instrument`: instruments are core discovery criteria and many-to-many teacher classifications;
-- `hamnavaz_country`: countries require normalized names and will be a primary discovery/admin-filter dimension;
+- `hamnavaz_country`: countries require normalized names and are the primary discovery/admin-filter dimension; each teacher may have exactly one assigned country;
 - `hamnavaz_language`: languages are reusable many-to-many classifications and likely future filters.
 
-State/province, city, suburb/area, and public location description remain structured metadata. Turning each location level into free-growing taxonomies now would increase maintenance and term duplication before the final public URL/SEO architecture is validated.
+The planned discovery sequence is **Country → City → Instrument**. Country remains a controlled taxonomy, but its normal tag-style assignment box is replaced by a single-select primary-country control. The save handler accepts only one valid country term ID, and a `set_object_terms` guard collapses any multi-country assignment made through another WordPress assignment path. When a single prior country is still present during an append operation, it is retained; otherwise malformed multiple assignments retain the lowest term ID deterministically.
+
+City does not become a global taxonomy. `_hamnavaz_city` remains the sanitized, human-readable label, while `_hamnavaz_city_key` is an internal, non-editable value derived with WordPress `sanitize_title`. Case, accents, surrounding whitespace, and common punctuation differences therefore converge on the same filter key (for example, `Brisbane` and `brisbane` both become `brisbane`). The key is synchronized whenever city metadata changes and is also backfilled from the current city value on the next normal teacher save. State/province, suburb/area, and public location description remain structured metadata. This avoids a massive city taxonomy while giving future queries a stable country + city-key + instrument contract.
 
 Teaching levels are a controlled multi-value metadata field (`beginner`, `intermediate`, `advanced`, `professional`) rather than a taxonomy. They are a small fixed vocabulary and do not yet need independent term pages or editorial term management. Specialisations remain sanitized free text because the vocabulary is not yet stable enough to normalize safely.
 
@@ -116,7 +119,7 @@ Verification state is separately restricted to `not_requested`, `pending`, `conf
 
 ## Admin experience
 
-The teacher edit screen uses logical meta boxes for Identity, Teaching, Location, Contact, Lesson Information, and Operational data. Core taxonomy boxes manage instruments, countries, and languages. The WordPress Featured Image box supplies the Media Library workflow; the plugin registers that core box as a fallback when the active theme does not declare thumbnail support for the teacher post type.
+The teacher edit screen uses logical meta boxes for Identity, Teaching, Location, Contact, Lesson Information, and Operational data. Core taxonomy boxes manage instruments and languages. Country uses a custom nonce-protected single-select taxonomy box so the edit form cannot submit multiple country terms. The WordPress Featured Image box supplies the Media Library workflow; the plugin registers that core box as a fallback when the active theme does not declare thumbnail support for the teacher post type.
 
 The teacher list screen adds:
 
@@ -140,15 +143,17 @@ It supports bounded admin-only filters for instrument, country, and listing stat
 - listing, verification, price-type, and teaching-level values must match controlled allowlists;
 - booleans are normalized explicitly;
 - dates must be valid `datetime-local` values or positive timestamps;
-- taxonomy assignment remains protected and normalized by WordPress core.
+- country input must be empty or one existing `hamnavaz_country` term ID;
+- `_hamnavaz_city_key` is derived with WordPress slug normalization and cannot be edited independently;
+- other taxonomy assignment remains protected and normalized by WordPress core.
 
 Invalid custom-field values do not overwrite existing metadata. A short-lived, user-specific admin notice identifies rejected field labels without echoing submitted data.
 
 ## Save and security controls
 
-Custom metadata saves require an intent-specific nonce and `edit_post` capability. The save handler ignores autosaves, revisions, unrelated post types, missing/invalid nonces, and unauthorized requests. Output is escaped by context. Entry files reject direct access. No arbitrary HTML, SQL, uploads, secrets, external requests, or third-party dependencies are introduced.
+Custom metadata saves require an intent-specific nonce and `edit_post` capability. Country changes use a separate intent-specific nonce and require both the post-edit and taxonomy term-assignment capabilities. The save handlers ignore autosaves, revisions, unrelated post types, missing/invalid nonces, and unauthorized requests. The one-country cleanup itself also runs on other valid teacher-save paths so an existing malformed record cannot remain multi-country after a save. Output is escaped by context. Entry files reject direct access. No arbitrary HTML, SQL, uploads, secrets, external requests, or third-party dependencies are introduced.
 
-The plugin uses WordPress core taxonomy and featured-image handlers for their respective nonce/capability workflows.
+The plugin uses WordPress core taxonomy relationships and featured-image handling. Instruments and languages retain the core taxonomy assignment workflow; the country assignment UI and invariant enforcement are deliberately narrower.
 
 ## Future-ready fields
 
@@ -165,7 +170,9 @@ WordPress post metadata is extensible, so these can be registered with feature-s
 
 ## Version and data evolution
 
-Phase 2 uses declarative CPT, taxonomy, and registered-meta definitions. It creates no custom tables and requires no one-time migration, so no separate data/schema version is introduced yet. The plugin version advances to `0.2.0`; the existing non-autoloaded plugin-version option is updated through the Phase 1 upgrade check.
+Phase 2 uses declarative CPT, taxonomy, and registered-meta definitions. It creates no custom tables and requires no eager one-time migration, so no separate data/schema version is introduced yet. The plugin version remains `0.2.0`; the existing non-autoloaded plugin-version option is updated through the Phase 1 upgrade check.
+
+Existing records remain compatible: their readable city value is unchanged, and `_hamnavaz_city_key` is created on the next teacher save or city metadata update. An existing multi-country record is visibly flagged in the country box; its deterministic current selection can be reviewed or changed, and saving removes the extra relationships. Future country assignment operations are also normalized immediately. No activation-time global teacher query or silent bulk location rewrite is performed.
 
 When an actual persistent schema migration becomes necessary, it must use a separate data/schema version and an explicit, retry-safe migration path.
 
@@ -179,5 +186,6 @@ Uninstall removes only the plugin-version option. Teacher posts, metadata, taxon
 
 - Runtime activation, edit/save, invalid-input, taxonomy, permission, admin-column, and warning/notice tests require a representative WordPress environment.
 - Country and language term vocabularies are administered manually; import/seed governance is not part of Phase 2.
+- City-key normalization consolidates spelling case, accents, whitespace, and punctuation, but genuinely different names or aliases still require editorial consistency; no global city synonym catalogue is introduced.
 - There is no public output, public query, application form, verification automation, notification channel, payment behavior, ranking, map, calendar integration, AI, or analytics implementation.
 - Teacher data export/import policy, audit logging, and a destructive erasure workflow require later product decisions.
