@@ -48,7 +48,7 @@ final class Plugin {
 	 * @return void
 	 */
 	public function register() {
-		add_action( 'init', array( $this, 'load_textdomain' ) );
+		add_action( 'init', array( $this, 'load_textdomain' ), 1 );
 		add_action( 'admin_init', array( $this, 'maybe_update_version' ) );
 
 		$loader = new Module_Loader(

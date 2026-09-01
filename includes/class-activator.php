@@ -17,7 +17,7 @@ final class Activator {
 	/**
 	 * Store the installed plugin version for future migrations.
 	 *
-	 * No tables, roles, capabilities, content, or rewrite rules are created in Phase 1.
+	 * No custom tables, roles, capabilities, content, or rewrite rules are created.
 	 *
 	 * @return void
 	 */
