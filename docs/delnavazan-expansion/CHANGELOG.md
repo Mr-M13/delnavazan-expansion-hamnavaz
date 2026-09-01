@@ -1,6 +1,14 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2870
-\cocoatextscaling0\cocoaplatform0{\fonttbl}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-}
+# Changelog
+
+All notable changes to Delnavazan Expansion are documented here.
+
+## [0.1.0] - 2026-09-01
+
+### Added
+
+- WordPress plugin bootstrap with shared version and location constants.
+- Explicit module contract and module loader.
+- Minimal Hamnavaz module with a capability-protected administrator status page.
+- Translation loading and RTL-compatible, screen-scoped administrator styling.
+- Reversible activation, deactivation, upgrade-version, and uninstall behaviour.
+- Phase 1 architecture, security, lifecycle, versioning, limitations, and deferred-scope documentation.

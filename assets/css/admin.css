@@ -1,0 +1,13 @@
+.delnavazan-expansion-admin__card {
+	box-sizing: border-box;
+	max-width: 48rem;
+	margin-block-start: 1rem;
+	padding: 1.5rem;
+	border-inline-start: 4px solid #6b3fa0;
+	background: #fff;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.delnavazan-expansion-admin__card h2 {
+	margin-block-start: 0;
+}

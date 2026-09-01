@@ -1,6 +1,9 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2870
-\cocoatextscaling0\cocoaplatform0{\fonttbl}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-}
+# Delnavazan Expansion
+
+Delnavazan Expansion is a self-contained WordPress plugin architecture for new Delnavazan capabilities. Hamnavaz is its first module.
+
+Phase 1 contains only the secure plugin foundation and a minimal administrator status screen. See [Phase 1 Plugin Architecture](PHASE-1-ARCHITECTURE.md) for the bootstrap, module boundary, lifecycle, security baseline, decisions, and deferred scope.
+
+## Specification status
+
+At the start of Phase 1, the detailed specification files in this directory contained empty RTF wrapper data rather than readable Markdown content. They are retained unchanged so missing product decisions are not silently invented. Those specifications must be restored before product-facing phases begin.
