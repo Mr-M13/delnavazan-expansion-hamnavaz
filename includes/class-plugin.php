@@ -76,7 +76,8 @@ final class Plugin {
 	/**
 	 * Keep the stored version current on code upgrades.
 	 *
-	 * Future schema migrations can be added here without expanding the bootstrap.
+	 * Future upgrade orchestration can begin here without expanding the bootstrap.
+	 * Schema migrations must track a separate data/schema version once required.
 	 *
 	 * @return void
 	 */

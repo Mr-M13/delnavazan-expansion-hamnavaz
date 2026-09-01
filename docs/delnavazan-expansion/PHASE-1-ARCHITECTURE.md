@@ -4,7 +4,7 @@
 
 Phase 1 establishes the Delnavazan Expansion plugin and initialises Hamnavaz as its first module. It deliberately contains no teacher directory, teacher data model, search, public profile, submission, verification, notification, payment, map, calendar, analytics, or homepage functionality.
 
-The detailed specification files present at the start of Phase 1 contained empty RTF wrapper data rather than readable product specifications. The implementation is therefore limited to the explicit Phase 1 project briefing. Product behaviour must not be inferred from this foundation.
+The canonical documents in this directory define the persistent product and engineering direction. Their future-facing requirements inform module boundaries without authorising functionality beyond the approved Phase 1 scope.
 
 ## Bootstrap flow
 
@@ -25,7 +25,7 @@ Future modules can be added as separate directories and registered in the coordi
 
 ## Versioning
 
-The plugin header and `DELNAVAZAN_EXPANSION_VERSION` use semantic versioning and must be updated together. Activation stores the current version in the non-autoloaded `delnavazan_expansion_version` option. An `admin_init` check also updates it after code upgrades, providing a bounded future migration entry point without running writes on public requests.
+The plugin header and `DELNAVAZAN_EXPANSION_VERSION` use semantic versioning and must be updated together. Activation stores the current version in the non-autoloaded `delnavazan_expansion_version` option. An `admin_init` check also updates it after code upgrades, providing a bounded future upgrade-orchestration point without running writes on public requests. Once schema migrations are necessary, they must use a separate data/schema version as required by `DATA-MODEL.md`.
 
 Phase 1 is version `0.1.0`.
 
@@ -67,7 +67,6 @@ The `delnavazan-expansion` text domain is loaded from `/languages`, and all admi
 
 ## Known limitations and deferred work
 
-- The committed product specification files need to be restored or replaced with valid Markdown before product functionality is designed.
 - A runnable WordPress installation is required to validate activation, deactivation, reactivation, capability behaviour, translations, and the rendered admin screen end to end.
 - Multisite-specific activation and uninstall orchestration is not included because no multisite requirement is specified.
 - Translation catalog files are not generated in Phase 1.
