@@ -17,7 +17,7 @@ final class Deactivator {
 	/**
 	 * Deactivate the plugin safely.
 	 *
-	 * Phase 1 registers no schedules or rewrite rules that require cleanup.
+	 * The plugin registers no schedules or rewrite rules that require cleanup.
 	 *
 	 * @return void
 	 */
