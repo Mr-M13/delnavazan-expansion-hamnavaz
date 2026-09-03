@@ -26,6 +26,7 @@ All notable changes to Delnavazan Expansion are documented here.
 - Avoided a nested `<main>` landmark when the active theme already supplies the document's main content element.
 - Ensured the controlled profile route emits exactly one canonical URL, including when Rank Math is active.
 - Preserved explicit left-to-right presentation of English teacher names under forceful RTL theme rules.
+- Kept public biography formatting inside the presenter allowlist by avoiding the global `the_content` pipeline and suppressing shortcode/dynamic-block execution.
 
 ### Security
 

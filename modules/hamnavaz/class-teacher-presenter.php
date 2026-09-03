@@ -167,7 +167,16 @@ final class Teacher_Presenter {
 			return '';
 		}
 
-		return wp_kses_post( apply_filters( 'the_content', $content ) );
+		$content = preg_replace( '/<!--.*?(?:-->|$)/s', '', $content );
+
+		if ( ! is_string( $content ) ) {
+			return '';
+		}
+
+		$content = strip_shortcodes( $content );
+		$content = wp_kses_post( $content );
+
+		return wp_kses_post( wpautop( $content ) );
 	}
 
 	/**

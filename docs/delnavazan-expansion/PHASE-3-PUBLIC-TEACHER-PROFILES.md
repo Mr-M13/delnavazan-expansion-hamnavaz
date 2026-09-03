@@ -94,6 +94,8 @@ Missing or malformed values produce no action rather than a broken link. No Meta
 
 The profile template includes the normal theme header and footer, then renders plugin-owned semantic content. Empty optional sections collapse. The hierarchy covers identity, profile photograph, instruments, location, introduction, biography, teaching, languages, lesson information, safe contacts, and optional information freshness.
 
+Public biographies do not invoke the site-wide `the_content` pipeline, shortcode callbacks, or dynamic block render callbacks. HTML and Gutenberg delimiter comments are removed, registered shortcode syntax is removed without rendering it, stored static block HTML and ordinary line-separated editorial text retain useful structure through `wpautop()`, and the result is constrained with `wp_kses_post()` before it reaches the template. This keeps biography formatting usable without allowing unrelated plugins to expand the public presentation boundary or leave block metadata in public source.
+
 No standalone `/hamnavaz/` landing page is required for the route and none is introduced in Phase 3.
 
 ## RTL, accessibility, and performance
