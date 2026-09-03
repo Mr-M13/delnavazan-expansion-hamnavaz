@@ -29,6 +29,23 @@ final class Teacher_Post_Type {
 	public function register() {
 		add_action( 'init', array( $this, 'register_post_type' ), 5 );
 		add_filter( 'enter_title_here', array( $this, 'filter_title_placeholder' ), 10, 2 );
+		add_action( 'add_meta_boxes_' . self::POST_TYPE, array( $this, 'register_slug_meta_box' ) );
+	}
+
+	/**
+	 * Expose WordPress's native editable slug control for the private post type.
+	 *
+	 * @return void
+	 */
+	public function register_slug_meta_box() {
+		add_meta_box(
+			'slugdiv',
+			esc_html__( 'Profile Slug', 'delnavazan-expansion' ),
+			'post_slug_meta_box',
+			self::POST_TYPE,
+			'normal',
+			'core'
+		);
 	}
 
 	/**

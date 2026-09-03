@@ -1,0 +1,282 @@
+.hamnavaz-profile,
+.hamnavaz-card {
+	--hamnavaz-ink: #241735;
+	--hamnavaz-muted: #655c70;
+	--hamnavaz-surface: #fff;
+	--hamnavaz-soft: #f7f3fa;
+	--hamnavaz-accent: #6e3b87;
+	--hamnavaz-accent-dark: #4f2665;
+	--hamnavaz-border: #ddd4e4;
+	box-sizing: border-box;
+	color: var(--hamnavaz-ink);
+}
+
+.hamnavaz-profile *,
+.hamnavaz-card * {
+	box-sizing: inherit;
+}
+
+.hamnavaz-profile {
+	background: var(--hamnavaz-soft);
+	line-height: 1.75;
+	padding-block: clamp(1rem, 4vw, 3rem);
+}
+
+.hamnavaz-profile__container {
+	inline-size: min(100% - 2rem, 68rem);
+	margin-inline: auto;
+}
+
+.hamnavaz-profile__breadcrumb {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .45rem;
+	font-size: .875rem;
+	margin-block-end: 1rem;
+}
+
+.hamnavaz-profile__hero,
+.hamnavaz-profile__section,
+.hamnavaz-card {
+	background: var(--hamnavaz-surface);
+	border: 1px solid var(--hamnavaz-border);
+	border-radius: 1rem;
+	box-shadow: 0 .35rem 1.5rem rgb(36 23 53 / 7%);
+}
+
+.hamnavaz-profile__hero {
+	display: grid;
+	gap: 1.5rem;
+	overflow: hidden;
+	padding: 1rem;
+}
+
+.hamnavaz-profile__photo-wrap {
+	background: #eee8f2;
+	border-radius: .75rem;
+	overflow: hidden;
+}
+
+.hamnavaz-profile__photo,
+.hamnavaz-profile__photo-placeholder {
+	aspect-ratio: 4 / 3;
+	display: block;
+	inline-size: 100%;
+	object-fit: cover;
+}
+
+.hamnavaz-profile__photo-placeholder,
+.hamnavaz-card__image-placeholder {
+	background: linear-gradient(135deg, #eee8f2, #d9c9e2);
+}
+
+.hamnavaz-profile__identity {
+	align-self: center;
+}
+
+.hamnavaz-profile__eyebrow {
+	color: var(--hamnavaz-accent);
+	font-size: .8rem;
+	font-weight: 700;
+	letter-spacing: .08em;
+	margin: 0 0 .35rem;
+	text-transform: uppercase;
+}
+
+.hamnavaz-profile h1 {
+	font-size: clamp(2rem, 8vw, 3.75rem);
+	line-height: 1.15;
+	margin: 0;
+}
+
+.hamnavaz-profile__english-name,
+.hamnavaz-card__english-name,
+.hamnavaz-profile__location,
+.hamnavaz-card__location,
+.hamnavaz-profile__freshness {
+	color: var(--hamnavaz-muted);
+}
+
+.hamnavaz-profile__english-name {
+	font-size: 1.125rem;
+	margin-block: .4rem 0;
+	text-align: start;
+}
+
+.hamnavaz-profile__english-name,
+.hamnavaz-card__english-name {
+	direction: ltr !important;
+	unicode-bidi: isolate;
+}
+
+.hamnavaz-profile__instruments {
+	color: var(--hamnavaz-accent-dark);
+	font-weight: 700;
+	margin-block: .8rem .25rem;
+}
+
+.hamnavaz-profile__location,
+.hamnavaz-profile__intro {
+	margin-block: .35rem;
+}
+
+.hamnavaz-profile__primary-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .65rem;
+	margin-block-start: 1.25rem;
+}
+
+.hamnavaz-button {
+	align-items: center;
+	background: var(--hamnavaz-accent);
+	border: 2px solid var(--hamnavaz-accent);
+	border-radius: .6rem;
+	color: #fff;
+	display: inline-flex;
+	font-weight: 700;
+	justify-content: center;
+	min-block-size: 44px;
+	padding: .65rem 1rem;
+	text-decoration: none;
+}
+
+.hamnavaz-button:hover {
+	background: var(--hamnavaz-accent-dark);
+	border-color: var(--hamnavaz-accent-dark);
+	color: #fff;
+}
+
+.hamnavaz-button:focus-visible,
+.hamnavaz-profile a:focus-visible,
+.hamnavaz-card a:focus-visible {
+	outline: 3px solid #e4a11b;
+	outline-offset: 3px;
+}
+
+.hamnavaz-button--secondary {
+	background: transparent;
+	color: var(--hamnavaz-accent-dark);
+}
+
+.hamnavaz-profile__content {
+	display: grid;
+	gap: 1rem;
+	margin-block-start: 1rem;
+}
+
+.hamnavaz-profile__section {
+	padding: clamp(1.1rem, 4vw, 2rem);
+}
+
+.hamnavaz-profile__section h2 {
+	font-size: clamp(1.35rem, 5vw, 1.75rem);
+	margin-block: 0 .8rem;
+}
+
+.hamnavaz-profile__section h3 {
+	font-size: 1.05rem;
+	margin-block: 1.2rem .35rem;
+}
+
+.hamnavaz-profile__section p:last-child,
+.hamnavaz-profile__prose > :last-child {
+	margin-block-end: 0;
+}
+
+.hamnavaz-profile__list {
+	margin-block: .5rem 0;
+	padding-inline-start: 1.3rem;
+}
+
+.hamnavaz-profile__freshness {
+	font-size: .875rem;
+	margin: .25rem .5rem 0;
+}
+
+.hamnavaz-card {
+	display: grid;
+	grid-template-columns: minmax(7rem, 35%) 1fr;
+	gap: 1rem;
+	overflow: hidden;
+	padding: .75rem;
+}
+
+.hamnavaz-card__media {
+	background: #eee8f2;
+	border-radius: .7rem;
+	overflow: hidden;
+}
+
+.hamnavaz-card__image,
+.hamnavaz-card__image-placeholder {
+	block-size: 100%;
+	display: block;
+	inline-size: 100%;
+	min-block-size: 9rem;
+	object-fit: cover;
+}
+
+.hamnavaz-card__body {
+	align-self: center;
+	min-inline-size: 0;
+}
+
+.hamnavaz-card__name {
+	font-size: 1.25rem;
+	line-height: 1.3;
+	margin: 0;
+	overflow-wrap: anywhere;
+}
+
+.hamnavaz-card__name a {
+	color: var(--hamnavaz-ink);
+	text-decoration: none;
+}
+
+.hamnavaz-card__english-name,
+.hamnavaz-card__instruments,
+.hamnavaz-card__location,
+.hamnavaz-card__availability,
+.hamnavaz-card__price {
+	font-size: .9rem;
+	margin-block: .3rem;
+}
+
+.hamnavaz-card .hamnavaz-button {
+	margin-block-start: .55rem;
+}
+
+@media (min-width: 46rem) {
+	.hamnavaz-profile__hero {
+		grid-template-columns: minmax(16rem, .8fr) minmax(0, 1.2fr);
+		padding: 1.5rem;
+	}
+
+	.hamnavaz-profile__content {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.hamnavaz-profile__section:first-child {
+		grid-column: 1 / -1;
+	}
+}
+
+@media (max-width: 25rem) {
+	.hamnavaz-card {
+		grid-template-columns: 1fr;
+	}
+
+	.hamnavaz-card__image,
+	.hamnavaz-card__image-placeholder {
+		aspect-ratio: 16 / 9;
+		block-size: auto;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.hamnavaz-profile *,
+	.hamnavaz-card * {
+		scroll-behavior: auto !important;
+	}
+}
