@@ -2,6 +2,39 @@
 
 All notable changes to Delnavazan Expansion are documented here.
 
+## [0.3.0] - 2026-09-02
+
+### Added
+
+- Controlled `/hamnavaz/teacher/{teacher-slug}/` public profile routing without enabling native CPT, archive, taxonomy, query-var, or REST exposure.
+- Central reusable public-eligibility policy requiring a published teacher and an `active` or canonically public `verification_due` listing state.
+- Explicit public metadata allowlist and normalized teacher presenter/view model for profiles and future search cards.
+- Reusable, compact teacher card plus a complete plugin-owned public profile template.
+- Mobile-first, RTL/LTR-aware, accessible public styling scoped to Hamnavaz public presentation.
+- Native WordPress slug editing for teacher records and one-time rewrite refresh on activation or version upgrade.
+- Profile document title, description, canonical URL, responsive image, and breadcrumb foundations, including minimal Rank Math filter integration.
+- Phase 3 architecture documentation covering routing, eligibility, privacy, contacts, SEO, schema deferral, theme integration, and Phase 4 boundaries.
+
+### Changed
+
+- Advanced the plugin version to `0.3.0`.
+- Updated deactivation to refresh rewrite rules while continuing to preserve all teacher data.
+
+### Fixed
+
+- Prevented Persian teacher slugs from being percent-encoded twice when profile URLs are generated.
+- Avoided a nested `<main>` landmark when the active theme already supplies the document's main content element.
+- Ensured the controlled profile route emits exactly one canonical URL, including when Rank Math is active.
+- Preserved explicit left-to-right presentation of English teacher names under forceful RTL theme rules.
+- Kept public biography formatting inside the presenter allowlist by avoiding the global `the_content` pipeline and suppressing shortcode/dynamic-block execution.
+
+### Security
+
+- Kept public visibility behind one fail-closed eligibility service and returned indistinguishable 404 behavior for missing and ineligible teachers.
+- Restricted public presentation to explicit core fields, approved metadata keys, and taxonomy names; internal states, notes, city keys, IDs, and future secret-bearing fields remain absent.
+- Added bounded WhatsApp/telephone normalization, HTTP(S)-only external links, validated email links, contextual escaping, and safe external-link attributes.
+- Deferred JSON-LD rather than expose speculative or private teacher relationships.
+
 ## [0.2.0] - 2026-09-01
 
 ### Added

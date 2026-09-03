@@ -17,11 +17,11 @@ final class Deactivator {
 	/**
 	 * Deactivate the plugin safely.
 	 *
-	 * The plugin registers no schedules or rewrite rules that require cleanup.
+	 * Persistent teacher data remains intact; only rewrite rules are refreshed.
 	 *
 	 * @return void
 	 */
 	public static function deactivate() {
-		// Intentionally empty. Persistent data is removed only by uninstall.php.
+		flush_rewrite_rules();
 	}
 }

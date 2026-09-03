@@ -90,6 +90,7 @@ Important documents:
 * `FUTURE-FEATURES.md`
 * `PHASE-1-ARCHITECTURE.md`
 * `PHASE-2-TEACHER-DATA-ADMIN.md`
+* `PHASE-3-PUBLIC-TEACHER-PROFILES.md`
 * `CHANGELOG.md`
 
 When implementation and documentation diverge, identify and resolve the discrepancy rather than silently assuming either is correct.

@@ -8,6 +8,7 @@
 namespace Delnavazan\Expansion;
 
 use Delnavazan\Expansion\Hamnavaz\Hamnavaz_Module;
+use Delnavazan\Expansion\Hamnavaz\Public_Routing;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -85,6 +86,8 @@ final class Plugin {
 		$installed_version = get_option( 'delnavazan_expansion_version' );
 
 		if ( DELNAVAZAN_EXPANSION_VERSION !== $installed_version ) {
+			Public_Routing::register_rewrite_rule();
+			flush_rewrite_rules();
 			update_option( 'delnavazan_expansion_version', DELNAVAZAN_EXPANSION_VERSION, false );
 		}
 	}

@@ -41,6 +41,7 @@ final class Hamnavaz_Module implements Module {
 			new Teacher_Taxonomies(),
 			new Teacher_Meta(),
 			new Teacher_Admin_List(),
+			new Public_Routing(),
 		);
 
 		foreach ( $components as $component ) {
@@ -104,7 +105,7 @@ final class Hamnavaz_Module implements Module {
 			<h1><?php echo esc_html__( 'Delnavazan Expansion', 'delnavazan-expansion' ); ?></h1>
 			<div class="delnavazan-expansion-admin__card">
 				<h2><?php echo esc_html__( 'Hamnavaz', 'delnavazan-expansion' ); ?></h2>
-				<p><?php echo esc_html__( 'The Hamnavaz teacher data and administration module is active.', 'delnavazan-expansion' ); ?></p>
+				<p><?php echo esc_html__( 'Hamnavaz teacher administration and controlled public profiles are active.', 'delnavazan-expansion' ); ?></p>
 				<p>
 					<strong><?php echo esc_html__( 'Version:', 'delnavazan-expansion' ); ?></strong>
 					<code><?php echo esc_html( DELNAVAZAN_EXPANSION_VERSION ); ?></code>

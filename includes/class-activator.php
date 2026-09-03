@@ -7,6 +7,8 @@
 
 namespace Delnavazan\Expansion;
 
+use Delnavazan\Expansion\Hamnavaz\Public_Routing;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -15,13 +17,13 @@ defined( 'ABSPATH' ) || exit;
 final class Activator {
 
 	/**
-	 * Store the installed plugin version for future migrations.
-	 *
-	 * No custom tables, roles, capabilities, content, or rewrite rules are created.
+	 * Store the installed version and make the controlled profile route available.
 	 *
 	 * @return void
 	 */
 	public static function activate() {
+		Public_Routing::register_rewrite_rule();
+		flush_rewrite_rules();
 		update_option( 'delnavazan_expansion_version', DELNAVAZAN_EXPANSION_VERSION, false );
 	}
 }
